@@ -67,5 +67,25 @@ module JSE
         results.should == ["{\"value\":4}"]
       end
     end
+
+    describe "#filter!" do
+      it "adds a new filter to the list" do
+        stream.filters = []
+        stream.filter!('field', 'text')
+        stream.filters.size.should == 1
+      end
+
+      it "adds a normal filter if it looks like a string" do
+        stream.filters = []
+        stream.filter!('field', 'text')
+        stream.filters.first.class.should == JSE::Filter
+      end
+
+      it "adds a regexp filter if it looks like a regexp" do
+        stream.filters = []
+        stream.filter!('field', '/^regexp$/')
+        stream.filters.first.class.should == JSE::RegexpFilter
+      end
+    end
   end
 end

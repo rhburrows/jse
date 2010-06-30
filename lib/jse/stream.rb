@@ -1,5 +1,4 @@
 require 'json'
-require 'ruby-debug'
 
 module JSE
   class Stream
@@ -20,10 +19,18 @@ module JSE
     end
 
     def filter!(field, text)
-      filters << Filter.new(field, text)
+      if looks_like_regexp?(text)
+        filters << RegexpFilter.new(field, text)
+      else
+        filters << Filter.new(field, text)
+      end
     end
 
     private
+
+    def looks_like_regexp?(string)
+      string[0,1] == '/' && string[string.size-1,1] == '/'
+    end
 
     def filter_chain
       FilterChain.new(filters)

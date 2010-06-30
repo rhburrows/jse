@@ -50,17 +50,22 @@ end
 # Just don't nest string or quotes in tests!
 def parse_options(opt_string)
   options = []
-  word = ""
-  in_string = false
-  string_delimiter = ""
+  string_delimiter = word = ""
+  in_regexp = in_string = false
 
   opt_string.each_char do |c|
-    if !in_string && (c == '"' || c == '\'')
+    if !(in_string || in_regexp) && (c == '"' || c == '\'')
       in_string = true
       string_delimiter = c
     elsif in_string && c == string_delimiter
       in_string = false
-    elsif c =~ /\s/ && !in_string
+    elsif !(in_regexp || in_string) && c == '/'
+      word << c
+      in_regexp = true
+    elsif in_regexp && c == '/'
+      word << c
+      in_regexp = false
+    elsif c =~ /\s/ && !in_string && !in_regexp
       options << word unless word.chomp == ''
       word = ""
     else

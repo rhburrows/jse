@@ -1,28 +1,32 @@
 Feature: jse matches specific fields within the json
 
-  Scenario: Exact match on one field
-    Given I have a log file containing:
+  In order to identify important lines
+  As a jse user
+  I want to filter my json by values in the specific fields
+
+  Background:
+  Given I have a log file containing:
     """
     {"level":"INFO","message":"line one"}
     {"level":"DEBUG","message":"line two"}
-    {"level":"ERROR","message":"line three"}
+    {"level":"ERROR","message":"number three"}
     {"level":"INFO","message":"line four"}
     """
+
+  Scenario: Exact match on one field
     When I run "jse level:INFO" on my log file
     Then I should see:
     """
     {"level":"INFO","message":"line one"}
     {"level":"INFO","message":"line four"}
     """
+    But I should not see:
+    """
+    {"level":"DEBUG","message":"line two"}
+    {"level":"ERROR","message":"number three"}
+    """
 
   Scenario: Exact match on multiple fields
-    Given I have a log file containing:
-    """
-    {"level":"INFO","message":"line one"}
-    {"level":"DEBUG","message":"line two"}
-    {"level":"ERROR","message":"line three"}
-    {"level":"INFO","message":"line four"}
-    """
     When I run "jse level:INFO message:'line one'" on my log file
     Then I should see:
     """
@@ -34,4 +38,17 @@ Feature: jse matches specific fields within the json
     """
 
   Scenario: Regexp match on one field
+    When I run "jse message:/^line/" on my log file
+    Then I should see:
+    """
+    {"level":"INFO","message":"line one"}
+    {"level":"DEBUG","message":"line two"}
+    {"level":"INFO","message":"line four"}
+    """
+    But I should not see:
+    """
+    {"level":"ERROR","message":"number three"}
+    """
+
   Scenario: Regexp match on multiple fields
+  Scenario: Both Exact an Regexp match in one
