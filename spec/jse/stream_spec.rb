@@ -49,20 +49,24 @@ module JSE
     let(:stream){ Stream.new(inner) }
 
     describe "#each_line" do
+      before do
+        inner.stub(:each_line).and_yield("{\"value\":\"a\"}").
+          and_yield("{\"value\":\"b\"}").
+          and_yield("{\"value\":\"c\"}")
+      end
+
       it "yields every line that matches all the filters" do
-        inner.stub(:each_line).and_yield("{\"value\":1}").
-          and_yield("{\"value\":2}")
         stream.filters = [PassingFilter.new]
         results = []
         stream.each_line do |l|
           results << l
         end
-        results.should == ["{\"value\":1}", "{\"value\":2}"]
+        results.should == [ "{\"value\":\"a\"}",
+                            "{\"value\":\"b\"}",
+                            "{\"value\":\"c\"}" ]
       end
 
       it "doesn't yields lines that don't match filters" do
-        inner.stub(:each_line).and_yield("{\"value\":1}").
-          and_yield("{\"value:\":2}")
         stream.filters = [FailingFilter.new]
         results = []
         stream.each_line do |l|
@@ -72,32 +76,26 @@ module JSE
       end
 
       it "works with multiple filters" do
-        inner.stub(:each_line).and_yield("{\"value\":1}").
-          and_yield("{\"value\":2}").
-          and_yield("{\"value\":4}")
         stream.filters = [NotFirstFilter.new, NotFirstFilter.new]
         results = []
         stream.each_line do |l|
           results << l
         end
-        results.should == ["{\"value\":4}"]
+        results.should == ["{\"value\":\"c\"}"]
       end
 
       it "yeilds every line if there are no filters" do
-        inner.stub(:each_line).and_yield("{\"value\":1}").
-          and_yield("{\"value\":2}")
         stream.filters = []
         results = []
         stream.each_line do |l|
           results << l
         end
-        results.should == ["{\"value\":1}", "{\"value\":2}"]
+        results.should == [ "{\"value\":\"a\"}",
+                            "{\"value\":\"b\"}",
+                            "{\"value\":\"c\"}" ]
       end
 
       it "runs all transforms on the lines" do
-        inner.stub(:each_line).and_yield("{\"value\":\"a\"}").
-          and_yield("{\"value\":\"b\"}").
-          and_yield("{\"value\":\"c\"}")
         stream.transforms = [ValueUpcaseTransform.new,
                              ValueDoubleTransform.new,
                              ToJsonTransform.new]
