@@ -41,7 +41,7 @@ module JSE
         stream.each_line do |line|
           stdout.puts line
         end
-      rescue Errno::EPIPE
+      rescue Errno::EPIPE, Interrupt
         # Catch broken pipes so we can use head etc.
       end
     end
