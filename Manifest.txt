@@ -1,0 +1,4 @@
+LICENSE
+README.md
+History.txt
+bin/jse

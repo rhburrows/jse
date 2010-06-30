@@ -1,0 +1,7 @@
+#!/usr/bin/ruby
+
+require 'rubygems'
+require File.expand_path(File.dirname(__FILE__) + '/../lib/jse')
+require 'jse/cli'
+
+JSE::CLI.execute(STDOUT, ARGV)
