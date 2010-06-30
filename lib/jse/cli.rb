@@ -37,8 +37,12 @@ module JSE
         stream.print!(*print)
       end
 
-      stream.each_line do |line|
-        stdout.puts line
+      begin
+        stream.each_line do |line|
+          stdout.puts line
+        end
+      rescue Errno::EPIPE
+        # Catch broken pipes so we can use head etc.
       end
     end
   end

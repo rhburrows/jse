@@ -1,4 +1,14 @@
 LICENSE
 README.md
 History.txt
+Manifest.txt
 bin/jse
+lib/jse.rb
+lib/jse/cli.rb
+lib/jse/field_value_transform.rb
+lib/jse/filter.rb
+lib/jse/regexp_filter.rb
+lib/jse/stream.rb
+lib/jse/subset_transform.rb
+lib/jse/to_json_transform.rb
+lib/jse/version.rb
