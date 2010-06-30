@@ -9,7 +9,7 @@ begin
 
   namespace :cucumber do
     Cucumber::Rake::Task.new(:ok) do |t|
-      t.cucumber_opts = "--format pretty -t ~@wip"
+      t.cucumber_opts = "--format progress -t ~@wip -b"
     end
 
     Cucumber::Rake::Task.new(:wip) do |t|

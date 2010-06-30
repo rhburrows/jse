@@ -1,4 +1,6 @@
 $:.unshift 'lib'
+require 'fileutils'
+
 require 'jse'
 require 'jse/cli'
 

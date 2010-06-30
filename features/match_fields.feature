@@ -51,4 +51,27 @@ Feature: jse matches specific fields within the json
     """
 
   Scenario: Regexp match on multiple fields
+    When I run "jse level:/O$/ message:/^line/" on my log file
+    Then I should see:
+    """
+    {"level":"INFO","message":"line one"}
+    {"level":"INFO","message":"line four"}
+    """
+    But I should not see:
+    """
+    {"level":"DEBUG","message":"line two"}
+    {"level":"ERROR","message":"number three"}
+    """
+
   Scenario: Both Exact an Regexp match in one
+    When I run "jse level:/INFO/ message:/^line/" on my log file
+    Then I should see:
+    """
+    {"level":"INFO","message":"line one"}
+    {"level":"INFO","message":"line four"}
+    """
+    But I should not see:
+    """
+    {"level":"DEBUG","message":"line two"}
+    {"level":"ERROR","message":"number three"}
+    """
