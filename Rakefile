@@ -47,6 +47,8 @@ end
 
 desc 'Push a the gem to gemcutter'
 task :release => :build do
+  system "git tag v#{JSE::VERSION}"
+  system "git push origin v#{JSE::VERSION}"
   system "gem push jse-#{JSE::VERSION}.gem"
 end
 
