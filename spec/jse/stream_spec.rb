@@ -124,6 +124,11 @@ module JSE
         stream.filters.first.class.should == JSE::Filter
       end
 
+      it "uses a case insensitive filter for exact string matches" do
+        stream.filter!('field', 'text', true)
+        stream.filters.first.class.should == JSE::CaseInsensitiveFilter
+      end
+
       it "adds a regexp filter if it looks like a regexp" do
         stream.filter!('field', '/^regexp$/')
         stream.filters.first.class.should == JSE::RegexpFilter

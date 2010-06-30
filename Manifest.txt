@@ -7,6 +7,7 @@ lib/jse.rb
 lib/jse/cli.rb
 lib/jse/field_value_transform.rb
 lib/jse/filter.rb
+lib/jse/case_insensitve_filter.rb
 lib/jse/regexp_filter.rb
 lib/jse/stream.rb
 lib/jse/subset_transform.rb

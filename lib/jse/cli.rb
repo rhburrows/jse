@@ -4,6 +4,7 @@ module JSE
   module CLI
     def self.execute(stdout, arguments = [])
       print = []
+      ignore_case = false
       parser = OptionParser.new do |opts|
         opts.banner = <<-BANNER.gsub(/^[ \t]*/, '')
         Json Stream Editor.
@@ -16,6 +17,10 @@ module JSE
         opts.on("-f", "--fields a,b,c", Array,
                 "List of fields to return") do |fields|
           print = fields
+        end
+        opts.on("-i", "--ignore-case",
+                "Make all matches case insensitive") do
+          ignore_case = true
         end
         opts.on("-h", "--help",
                 "Show this help message.") { stdout.puts opts; exit }
@@ -30,7 +35,7 @@ module JSE
 
       arguments.each do |arg|
         field, text = arg.split(':')
-        stream.filter!(field, text)
+        stream.filter!(field, text, ignore_case)
       end
 
       unless print.empty?

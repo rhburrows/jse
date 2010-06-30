@@ -3,6 +3,7 @@ $:.unshift(File.dirname(__FILE__)) unless
 
 require 'jse/stream'
 require 'jse/filter'
+require 'jse/case_insensitive_filter'
 require 'jse/regexp_filter'
 require 'jse/subset_transform'
 require 'jse/to_json_transform'

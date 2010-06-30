@@ -19,11 +19,19 @@ module JSE
       end
     end
 
-    def filter!(field, text)
+    def filter!(field, text, ignore_case = false)
       if looks_like_regexp?(text)
-        filters << RegexpFilter.new(field, text)
+        if ignore_case
+          filters << RegexpFilter.new(field, text, Regexp::IGNORECASE)
+        else
+          filters << RegexpFilter.new(field, text)
+        end
       else
-        filters << Filter.new(field, text)
+        if ignore_case
+          filters << CaseInsensitiveFilter.new(field, text)
+        else
+          filters << Filter.new(field, text)
+        end
       end
     end
 

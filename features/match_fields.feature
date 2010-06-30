@@ -75,3 +75,29 @@ Feature: jse matches specific fields within the json
     {"level":"DEBUG","message":"line two"}
     {"level":"ERROR","message":"number three"}
     """
+
+  Scenario: Case insensitive exact matching
+    When I run "jse level:info -i" on my log file
+    Then I should see:
+    """
+    {"level":"INFO","message":"line one"}
+    {"level":"INFO","message":"line four"}
+    """
+    But I should not see:
+    """
+    {"level":"DEBUG","message":"line two"}
+    {"level":"ERROR","message":"number three"}
+    """
+
+  Scenario: Case insensitive regexp matching
+    When I run "jse message:/^LINe/ -i" on my log file
+    Then I should see:
+    """
+    {"level":"INFO","message":"line one"}
+    {"level":"INFO","message":"line four"}
+    {"level":"DEBUG","message":"line two"}
+    """
+    But I should not see:
+    """
+    {"level":"ERROR","message":"number three"}
+    """
